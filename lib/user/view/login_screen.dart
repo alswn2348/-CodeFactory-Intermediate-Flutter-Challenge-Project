@@ -5,11 +5,20 @@ import 'package:codefactory_flutte_project/common/component/custom_text_form_fie
 import 'package:codefactory_flutte_project/common/const/colors.dart';
 import 'package:codefactory_flutte_project/common/const/gaps.dart';
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
+import 'package:codefactory_flutte_project/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -42,18 +51,22 @@ class LoginScreen extends StatelessWidget {
                 Gaps.v16,
                 CustomTextFormField(
                   hintText: "이메일을 입력해주세요",
-                  onChanged: (String value) {},
+                  onChanged: (String value) {
+                    username = value;
+                  },
                 ),
                 Gaps.v16,
                 CustomTextFormField(
                   hintText: "비밀번호를 입력해주세요",
-                  onChanged: (String value) {},
+                  onChanged: (String value) {
+                    password = value;
+                  },
                   obscureText: true,
                 ),
                 Gaps.v16,
                 ElevatedButton(
                   onPressed: () async {
-                    const rawString = 'test@codefactory.ai:testtest'; //id 비밀번호
+                    final rawString = '$username:$password'; //id : 비밀번호
 
                     Codec<String, String> stringToBase64 =
                         utf8.fuse(base64); //String 을 Base64 로 바꿔주는 코덱
@@ -80,9 +93,16 @@ class LoginScreen extends StatelessWidget {
                     final resp = await dio.post(
                       'http://$ip/auth/token',
                       options: Options(
-                          headers: {'authorization': 'Bearer $refreshToken'}),
+                        headers: {
+                          'authorization': 'Bearer $refreshToken',
+                        },
+                      ),
                     );
-
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const RootTab(),
+                      ),
+                    );
                     print(resp.data);
                   },
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
