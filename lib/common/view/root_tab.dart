@@ -1,3 +1,4 @@
+import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
 
 class RootTab extends StatelessWidget {
@@ -5,8 +6,10 @@ class RootTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text("root tab"),
+    return DefaultLayout(
+      child: Container(
+        child: const Text("root tab"),
+      ),
     );
   }
 }
