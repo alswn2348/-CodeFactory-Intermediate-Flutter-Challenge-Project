@@ -5,12 +5,14 @@ class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
   final Widget child;
   final String? title;
+  final Widget? bottomNavigationBar;
 
   const DefaultLayout({
     super.key,
     required this.child,
     this.backgroundColor,
     this.title,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -19,6 +21,7 @@ class DefaultLayout extends StatelessWidget {
       backgroundColor: backgroundColor ?? Colors.white,
       appBar: randerAppBar(),
       body: child,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 
