@@ -41,6 +41,10 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         ),
       );
+
+      await stroage.write(
+          key: ACCESS_TOKEN_KYE, value: resp.data['accessToken']);
+
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
