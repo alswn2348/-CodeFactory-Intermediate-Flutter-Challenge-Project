@@ -1,6 +1,7 @@
 import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/const/sizes.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
+import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -37,19 +38,19 @@ class RestaurantScreen extends StatelessWidget {
               return ListView.separated(
                   itemBuilder: (_, index) {
                     final item = snapshot.data![index];
-
+                    final paesdItem = RestaurantModel.fromJson(json: item);
                     return RestaurantCard(
                       image: Image.network(
-                        'http://$ip${item['thumbUrl']}',
+                        'http://$ip${paesdItem.thumbUrl}',
                         fit: BoxFit.cover,
                       ),
-                      name: item['name'],
+                      name: paesdItem.name,
                       tags: List<String>.from(
                           item['tags']), //Lsit<dynamic> 을 List<String> 으로 변경
-                      ratingsCount: item['ratingsCount'],
-                      deliveryTime: item['deliveryTime'],
-                      deliveryFee: item['deliveryFee'],
-                      ratings: item['ratings'],
+                      ratingsCount: paesdItem.ratingsCount,
+                      deliveryTime: paesdItem.deliveryTime,
+                      deliveryFee: paesdItem.deliveryFee,
+                      ratings: paesdItem.ratings,
                     );
                   },
                   separatorBuilder: (_, index) {
