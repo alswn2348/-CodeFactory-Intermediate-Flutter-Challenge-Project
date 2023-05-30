@@ -1,4 +1,5 @@
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
+import 'package:codefactory_flutte_project/product/component/product_card.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,12 @@ class RestaurantDetailScreen extends StatelessWidget {
             deliveryFee: 2000,
             ratings: 4.52,
             isDetail: true,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ),
+            child: ProductCard(),
           ),
         ],
       ),
