@@ -2,6 +2,7 @@ import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/const/sizes.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
+import 'package:codefactory_flutte_project/restaurant/view/restaurant_detail_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,16 @@ class RestaurantScreen extends StatelessWidget {
                   itemBuilder: (_, index) {
                     final item = snapshot.data![index];
                     final parsedItem = RestaurantModel.fromJson(json: item);
-                    return RestaurantCard.fromModel(model: parsedItem);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const RestaurantDetailScreen(),
+                          ),
+                        );
+                      },
+                      child: RestaurantCard.fromModel(model: parsedItem),
+                    );
                   },
                   separatorBuilder: (_, index) {
                     return const SizedBox(
