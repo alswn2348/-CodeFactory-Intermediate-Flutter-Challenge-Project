@@ -1,37 +1,66 @@
+import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
 import 'package:codefactory_flutte_project/product/component/product_card.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
+import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantDetailScreen extends StatelessWidget {
-  const RestaurantDetailScreen({super.key});
+  final String id;
+
+  const RestaurantDetailScreen({
+    super.key,
+    required this.id,
+  });
+
+  Future<Map<String, dynamic>> getRestaurantDetail() async {
+    final dio = Dio();
+
+    final accessToken = await stroage.read(key: ACCESS_TOKEN_KYE);
+
+    final resp = await dio.get(
+      'http://$ip/restaurant/$id',
+      options: Options(
+        headers: {"authorization": 'Bearer $accessToken'},
+      ),
+    );
+    return resp.data;
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-        title: "떡뽂이",
-        child: CustomScrollView(
-          slivers: [
-            randerTop(),
-            randerLabel(),
-            randerProducts(),
-          ],
-        ));
+      title: "떡뽂이",
+      child: FutureBuilder<Map<String, dynamic>>(
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          final item = RestaurantDetailModel.fromJson(
+            json: snapshot.data!,
+          );
+          return CustomScrollView(
+            slivers: [
+              randerTop(
+                model: item,
+              ),
+              randerLabel(),
+              randerProducts(),
+            ],
+          );
+        },
+      ),
+    );
   }
 
-  SliverToBoxAdapter randerTop() {
+  SliverToBoxAdapter randerTop({required RestaurantDetailModel model}) {
     return SliverToBoxAdapter(
-      child: RestaurantCard(
-        image: Image.asset(
-          'asset/img/food/ddeok_bok_gi.jpg',
-          fit: BoxFit.cover,
-        ),
-        name: '엽기 떡볶이',
-        tags: const ['떡볶이', '치즈', '매운맛'],
-        ratingsCount: 100,
-        deliveryTime: 15,
-        deliveryFee: 2000,
-        ratings: 4.52,
+      child: RestaurantCard.fromModel(
+        model: model,
         isDetail: true,
       ),
     );
