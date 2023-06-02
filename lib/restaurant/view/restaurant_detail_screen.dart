@@ -22,7 +22,9 @@ class RestaurantDetailScreen extends StatelessWidget {
     final resp = await dio.get(
       'http://$ip/restaurant/$id',
       options: Options(
-        headers: {"authorization": 'Bearer $accessToken'},
+        headers: {
+          "authorization": 'Bearer $accessToken',
+        },
       ),
     );
     return resp.data;
@@ -33,6 +35,7 @@ class RestaurantDetailScreen extends StatelessWidget {
     return DefaultLayout(
       title: "떡뽂이",
       child: FutureBuilder<Map<String, dynamic>>(
+        future: getRestaurantDetail(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -49,7 +52,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                 model: item,
               ),
               randerLabel(),
-              randerProducts(),
+              randerProducts(products: item.products),
             ],
           );
         },
@@ -66,16 +69,19 @@ class RestaurantDetailScreen extends StatelessWidget {
     );
   }
 
-  SliverPadding randerProducts() {
+  SliverPadding randerProducts(
+      {required List<RestaurantProductModel> products}) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          childCount: 10,
+          childCount: products.length,
           (context, index) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: ProductCard(),
+            final model = products[index];
+
+            return Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: ProductCard.fromModel(model: model),
             );
           },
         ),
