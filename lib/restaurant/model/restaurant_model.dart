@@ -1,4 +1,7 @@
-import 'package:codefactory_flutte_project/common/const/data.dart';
+import 'package:codefactory_flutte_project/common/utils/data_utils.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'restaurant_model.g.dart';
 
 enum RestaurantPriceRange {
   expensive,
@@ -6,9 +9,14 @@ enum RestaurantPriceRange {
   cheap,
 }
 
+@JsonSerializable()
 class RestaurantModel {
   final String id;
   final String name;
+  //JsonKey는 파라미터를 안넣어도 결과값을 static method에 한번 넣어준다.
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String thumbUrl;
   final List<String> tags;
   final RestaurantPriceRange priceRange;
@@ -29,7 +37,13 @@ class RestaurantModel {
     required this.deliveryFee,
   });
 
-  factory RestaurantModel.fromJson({
+  factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantModelFromJson(json);
+
+  //toJson
+  //Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
+
+/*   factory RestaurantModel.fromJson({
     required Map<String, dynamic> json,
   }) {
     return RestaurantModel(
@@ -47,5 +61,5 @@ class RestaurantModel {
       deliveryTime: json['deliveryTime'],
       deliveryFee: json['deliveryFee'],
     );
-  }
+  } */
 }

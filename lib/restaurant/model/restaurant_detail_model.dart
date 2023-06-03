@@ -1,6 +1,10 @@
-import 'package:codefactory_flutte_project/common/const/data.dart';
+import 'package:codefactory_flutte_project/common/utils/data_utils.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'restaurant_detail_model.g.dart';
+
+@JsonSerializable()
 class RestaurantDetailModel extends RestaurantModel {
   final String detail;
   final List<RestaurantProductModel> products;
@@ -19,7 +23,10 @@ class RestaurantDetailModel extends RestaurantModel {
     required this.products,
   });
 
-  factory RestaurantDetailModel.fromJson({required Map<String, dynamic> json}) {
+  factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantDetailModelFromJson(json);
+
+  /* factory RestaurantDetailModel.fromJson({required Map<String, dynamic> json}) {
     return RestaurantDetailModel(
       id: json['id'],
       name: json['name'],
@@ -39,12 +46,16 @@ class RestaurantDetailModel extends RestaurantModel {
               ))
           .toList(),
     );
-  }
+  } */
 }
 
+@JsonSerializable()
 class RestaurantProductModel {
   final String id;
   final String name;
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String imgUrl;
   final String detail;
   final int price;
@@ -57,7 +68,10 @@ class RestaurantProductModel {
     required this.price,
   });
 
-  factory RestaurantProductModel.fromJson(
+  factory RestaurantProductModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantProductModelFromJson(json);
+
+  /* factory RestaurantProductModel.fromJson(
       {required Map<String, dynamic> json}) {
     return RestaurantProductModel(
       id: json['id'],
@@ -66,5 +80,5 @@ class RestaurantProductModel {
       detail: json['detail'],
       price: json['price'],
     );
-  }
+  } */
 }
