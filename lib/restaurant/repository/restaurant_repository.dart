@@ -1,4 +1,6 @@
+import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
+import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 
@@ -9,8 +11,11 @@ abstract class RestaurantRepository {
   factory RestaurantRepository(Dio dio, {String baseUrl}) =
       _RestaurantRepository;
 
-  /*  @GET("/")
-  paginate(); */
+  @GET("/")
+  @Headers({
+    'accesstoken': 'true',
+  })
+  Future<CursorPagination<RestaurantModel>> paginate();
 
   @GET("/{id}")
   @Headers({
