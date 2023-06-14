@@ -1,6 +1,22 @@
 import 'package:codefactory_flutte_project/common/const/data.dart';
+import 'package:codefactory_flutte_project/common/secure_storage/secure_stroage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final dioProvider = Provider<Dio>(
+  (ref) {
+    final dio = Dio();
+
+    final storage = ref.watch(secureStorageProvider);
+
+    dio.interceptors.add(
+      CustomInterceptor(storage: storage),
+    );
+
+    return dio;
+  },
+);
 
 class CustomInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
@@ -26,14 +42,13 @@ class CustomInterceptor extends Interceptor {
     super.onRequest(options, handler);
   }
 
-  //응답을 받을때
   //에러났을때
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     super.onError(err, handler);
 
     //status code 401
-    final refreshToken = await stroage.read(key: REFRESH_TOKEN_KEY);
+    final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
 
     if (refreshToken == null) {
       return handler.reject(err); //에러 반환
@@ -62,7 +77,7 @@ class CustomInterceptor extends Interceptor {
           },
         );
 
-        await stroage.write(key: ACCESS_TOKEN_KYE, value: accessToken);
+        await storage.write(key: ACCESS_TOKEN_KYE, value: accessToken);
 
         final respons = await dio.fetch(options); //재전송
 

@@ -16,7 +16,7 @@ class CursorPagination<T> {
 
   factory CursorPagination.fromJson(
           Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
-      _$CursorPaginationFromJson(json, fromJsonT);
+      _$CursorPaginationFromJson(json, fromJsonT); //fromJsonT 로 맵핑
 }
 
 @JsonSerializable()

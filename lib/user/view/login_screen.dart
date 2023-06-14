@@ -6,18 +6,20 @@ import 'package:codefactory_flutte_project/common/const/colors.dart';
 import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/const/gaps.dart';
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
+import 'package:codefactory_flutte_project/common/secure_storage/secure_stroage.dart';
 import 'package:codefactory_flutte_project/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String username = '';
   String password = '';
 
@@ -82,9 +84,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     final refreshToken = resp.data['refreshToken'];
                     final accessToken = resp.data['accessToken'];
 
-                    await stroage.write(
+                    final storage = ref.read(secureStorageProvider);
+
+                    await storage.write(
                         key: REFRESH_TOKEN_KEY, value: refreshToken);
-                    await stroage.write(
+                    await storage.write(
                         key: ACCESS_TOKEN_KYE, value: accessToken);
 
                     if (!mounted) return;
@@ -99,10 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text("로그인"),
                 ),
                 TextButton(
-                  onPressed: () async {
-                  
-               
-                  },
+                  onPressed: () async {},
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
                   child: const Text("회원가입"),
                 )

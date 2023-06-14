@@ -2,19 +2,21 @@ import 'package:codefactory_flutte_project/common/const/colors.dart';
 import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/const/gaps.dart';
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
+import 'package:codefactory_flutte_project/common/secure_storage/secure_stroage.dart';
 import 'package:codefactory_flutte_project/common/view/root_tab.dart';
 import 'package:codefactory_flutte_project/user/view/login_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
@@ -22,12 +24,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void deleteToken() async {
-    await stroage.deleteAll();
+    final storage = ref.read(secureStorageProvider);
+
+    await storage.deleteAll();
   }
 
   void checkToken() async {
-    final refreshToken = await stroage.read(key: REFRESH_TOKEN_KEY);
-    final accessToken = await stroage.read(key: ACCESS_TOKEN_KYE);
+    final storage = ref.read(secureStorageProvider);
+
+    final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KYE);
 
     final dio = Dio();
 
@@ -42,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
 
-      await stroage.write(
+      await storage.write(
           key: ACCESS_TOKEN_KYE, value: resp.data['accessToken']);
 
       if (!mounted) return;
