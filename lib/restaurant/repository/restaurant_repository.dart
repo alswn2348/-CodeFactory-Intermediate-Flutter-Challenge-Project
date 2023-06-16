@@ -1,6 +1,7 @@
 import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/dio/dio.dart';
 import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
+import 'package:codefactory_flutte_project/common/model/pagination_params.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -29,7 +30,9 @@ abstract class RestaurantRepository {
   @Headers({
     'accesstoken': 'true',
   })
-  Future<CursorPagination<RestaurantModel>> paginate();
+  Future<CursorPagination<RestaurantModel>> paginate({
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   @GET("/{id}")
   @Headers({
