@@ -16,4 +16,11 @@ class PaginationParams {
       _$PaginationParamsFromJson(json);
 
   Map<String, dynamic> toJson() => _$PaginationParamsToJson(this);
+
+  PaginationParams copyWith({String? after, int? count}) {
+    return PaginationParams(
+      count: count ?? this.count,
+      after: after ?? this.after,
+    );
+  }
 }
