@@ -56,29 +56,34 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ListView.separated(
-          controller: controller,
-          itemBuilder: (_, index) {
-            final pItem = cp.data[index];
+        controller: controller,
+        itemBuilder: (_, index) {
+          if (index == cp.data.length) {
+            return Center(child: data is CursorpaginationFetchingMore ? const CircularProgressIndicator() : const Text("더 이상 데이터가 없습니다.",),)
+          }
 
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => RestaurantDetailScreen(
-                      id: pItem.id,
-                    ),
+          final pItem = cp.data[index];
+
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => RestaurantDetailScreen(
+                    id: pItem.id,
                   ),
-                );
-              },
-              child: RestaurantCard.fromModel(model: pItem),
-            );
-          },
-          separatorBuilder: (_, index) {
-            return const SizedBox(
-              height: Sizes.size16,
-            );
-          },
-          itemCount: cp.data.length),
+                ),
+              );
+            },
+            child: RestaurantCard.fromModel(model: pItem),
+          );
+        },
+        separatorBuilder: (_, index) {
+          return const SizedBox(
+            height: Sizes.size16,
+          );
+        },
+        itemCount: cp.data.length + 1,
+      ),
     );
   }
 }
