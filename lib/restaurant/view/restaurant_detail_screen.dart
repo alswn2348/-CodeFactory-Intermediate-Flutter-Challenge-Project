@@ -2,7 +2,8 @@ import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
 import 'package:codefactory_flutte_project/product/component/product_card.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
-import 'package:codefactory_flutte_project/restaurant/repository/restaurant_repository.dart';
+import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
+import 'package:codefactory_flutte_project/restaurant/provider/restaurant_provier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,33 +17,26 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(restaurantDetailProvider(id));
+
+    if(state == null){
+      return const DefaultLayout(child: Center(child: CircularProgressIndicator(),),);
+    }
     return DefaultLayout(
       title: "떡뽂이",
-      child: FutureBuilder<RestaurantDetailModel>(
-        future:
-            ref.watch(restaurantRepositoryProvider).getRestaurantDetail(id: id),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          return CustomScrollView(
+      child:  CustomScrollView(
             slivers: [
               randerTop(
-                model: snapshot.data!,
+                model: state,
               ),
               randerLabel(),
               randerProducts(products: snapshot.data!.products),
             ],
           );
-        },
-      ),
     );
   }
 
-  SliverToBoxAdapter randerTop({required RestaurantDetailModel model}) {
+  SliverToBoxAdapter randerTop({required RestaurantModel model}) {
     return SliverToBoxAdapter(
       child: RestaurantCard.fromModel(
         model: model,
