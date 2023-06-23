@@ -6,6 +6,7 @@ import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dar
 import 'package:codefactory_flutte_project/restaurant/provider/restaurant_provier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletons/skeletons.dart';
 
 class RestaurantDetailScreen extends ConsumerWidget {
   final String id;
@@ -17,22 +18,56 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(restaurantDetailProvider(id));
+    final state = ref.watch(
+      restaurantDetailProvider(id),
+    );
 
-    if(state == null){
-      return const DefaultLayout(child: Center(child: CircularProgressIndicator(),),);
+    if (state == null) {
+      return const DefaultLayout(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return DefaultLayout(
       title: "떡뽂이",
-      child:  CustomScrollView(
-            slivers: [
-              randerTop(
-                model: state,
+      child: CustomScrollView(
+        slivers: [
+          randerTop(
+            model: state,
+          ),
+          if (state is! RestaurantDetailModel) renderLoading(),
+          if (state is RestaurantDetailModel) renderLabel(),
+          if (state is RestaurantDetailModel)
+            renderProducts(
+              products: state.products,
+            ),
+        ],
+      ),
+    );
+  }
+
+  SliverPadding renderLoading() {
+    return SliverPadding(
+      padding: const EdgeInsets.all(
+        16.0,
+      ),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(
+          List.generate(
+            3,
+            (index) => Padding(
+              padding: const EdgeInsets.only(bottom: 32.0),
+              child: SkeletonParagraph(
+                style: const SkeletonParagraphStyle(
+                  lines: 5,
+                  padding: EdgeInsets.zero,
+                ),
               ),
-              randerLabel(),
-              randerProducts(products: snapshot.data!.products),
-            ],
-          );
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -45,7 +80,7 @@ class RestaurantDetailScreen extends ConsumerWidget {
     );
   }
 
-  SliverPadding randerProducts(
+  SliverPadding renderProducts(
       {required List<RestaurantProductModel> products}) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -65,7 +100,7 @@ class RestaurantDetailScreen extends ConsumerWidget {
     );
   }
 
-  SliverPadding randerLabel() {
+  SliverPadding renderLabel() {
     return const SliverPadding(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         sliver: SliverToBoxAdapter(
