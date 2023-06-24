@@ -23,15 +23,20 @@ class RatingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Header(
-        avatarImage: avatarImage,
-        email: email,
-        rating: rating,
-      ),
-      const Body(),
-      const Images(),
-    ]);
+    return Column(
+      children: [
+        Header(
+          avatarImage: avatarImage,
+          email: email,
+          rating: rating,
+        ),
+        const SizedBox(
+          height: 8.0,
+        ),
+        Body(content: content),
+        const Images(),
+      ],
+    );
   }
 }
 
@@ -81,11 +86,21 @@ class Header extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  const Body({super.key});
+  final String content;
+
+  const Body({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Flexible(
+      child: Text(
+        content,
+        style: const TextStyle(
+          color: BODY_TEXT_COLOR,
+          fontSize: 14.0,
+        ),
+      ),
+    );
   }
 }
 
