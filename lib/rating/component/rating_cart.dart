@@ -1,5 +1,6 @@
 import 'package:codefactory_flutte_project/common/const/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class RatingCard extends StatelessWidget {
   final ImageProvider avatarImage;
@@ -34,7 +35,10 @@ class RatingCard extends StatelessWidget {
           height: 8.0,
         ),
         Body(content: content),
-        const Images(),
+        if (images.isNotEmpty)
+          Images(
+            images: images,
+          ),
       ],
     );
   }
@@ -105,10 +109,32 @@ class Body extends StatelessWidget {
 }
 
 class Images extends StatelessWidget {
-  const Images({super.key});
+  final List<Image> images;
+
+  const Images({
+    super.key,
+    required this.images,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return SizedBox(
+      height: 100,
+      child: ListView(
+        children: images
+            .mapIndexed(
+              (index, e) => Padding(
+                padding: EdgeInsets.only(
+                  right: index == images.length - 1 ? 0 : 16.0,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: e,
+                ),
+              ),
+            )
+            .toList(),
+      ),
+    );
   }
 }
