@@ -1,5 +1,6 @@
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
 import 'package:codefactory_flutte_project/product/component/product_card.dart';
+import 'package:codefactory_flutte_project/rating/component/rating_cart.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
@@ -42,6 +43,18 @@ class RestaurantDetailScreen extends ConsumerWidget {
             renderProducts(
               products: state.products,
             ),
+          const SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            sliver: SliverToBoxAdapter(
+              child: RatingCard(
+                avatarImage: AssetImage('asset/img/logo/codefactory_logo.png'),
+                images: [],
+                rating: 4,
+                email: "minju123@naver.com",
+                content: "괜찮아요",
+              ),
+            ),
+          )
         ],
       ),
     );
