@@ -35,6 +35,7 @@ class RatingCard extends StatelessWidget {
           height: 8.0,
         ),
         Body(content: content),
+        
         if (images.isNotEmpty)
           Images(
             images: images,

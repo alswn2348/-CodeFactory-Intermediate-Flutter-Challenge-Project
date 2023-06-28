@@ -59,7 +59,13 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
         controller: controller,
         itemBuilder: (_, index) {
           if (index == cp.data.length) {
-            return Center(child: data is CursorpaginationFetchingMore ? const CircularProgressIndicator() : const Text("더 이상 데이터가 없습니다.",),)
+            return Center(
+              child: data is CursorpaginationFetchingMore
+                  ? const CircularProgressIndicator()
+                  : const Text(
+                      "더 이상 데이터가 없습니다.",
+                    ),
+            );
           }
 
           final pItem = cp.data[index];
