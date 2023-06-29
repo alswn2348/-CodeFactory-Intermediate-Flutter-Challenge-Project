@@ -2,6 +2,7 @@ import 'package:codefactory_flutte_project/common/const/data.dart';
 import 'package:codefactory_flutte_project/common/dio/dio.dart';
 import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
 import 'package:codefactory_flutte_project/common/model/pagination_params.dart';
+import 'package:codefactory_flutte_project/common/repository/base_pagination_repository.dart';
 import 'package:codefactory_flutte_project/rating/model/rating_model.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,10 +19,12 @@ final RestaurantRatingRepositoryProvider =
 });
 
 @RestApi()
-abstract class RestaurantRatingRepository {
+abstract class RestaurantRatingRepository
+    implements IBasePaginationRepository<RatingModel> {
   factory RestaurantRatingRepository(Dio dio, {String baseUrl}) =
       _RestaurantRatingRepository;
 
+  @override
   @GET("/")
   @Headers({
     'accesstoken': 'true',
