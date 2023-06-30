@@ -1,3 +1,4 @@
+import 'package:codefactory_flutte_project/common/model/model_with_id.dart';
 import 'package:codefactory_flutte_project/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,8 +11,10 @@ enum RestaurantPriceRange {
 }
 
 @JsonSerializable()
-class RestaurantModel {
+class RestaurantModel implements IModelWithId {
+  @override
   final String id;
+
   final String name;
   //JsonKey는 파라미터를 안넣어도 결과값을 static method에 한번 넣어준다.
   @JsonKey(

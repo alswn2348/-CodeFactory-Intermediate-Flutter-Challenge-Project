@@ -1,9 +1,11 @@
 import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
+import 'package:codefactory_flutte_project/common/model/model_with_id.dart';
 import 'package:codefactory_flutte_project/common/model/pagination_params.dart';
 import 'package:codefactory_flutte_project/common/repository/base_pagination_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PaginationProvider<U extends IBasePaginationRepository>
+class PaginationProvider<T extends IModelWithId,
+        U extends IBasePaginationRepository<T>>
     extends StateNotifier<CursorPaginationBase> {
   final U repository;
 
@@ -45,7 +47,7 @@ class PaginationProvider<U extends IBasePaginationRepository>
 
       //CursorPaginationFetchMore - 추가 데이터 요청 받았을때
       if (fetchMore) {
-        final pState = state as CursorPagination;
+        final pState = state as CursorPagination<T>;
 
         //state  상태 변경
         state = CursorpaginationFetchingMore(
@@ -65,7 +67,7 @@ class PaginationProvider<U extends IBasePaginationRepository>
         }
         //데이터가 있고 보존한채로 Fetch 할때
         if (state is CursorPagination && !forceRefetch) {
-          final pState = state as CursorPagination;
+          final pState = state as CursorPagination<T>;
           state = CursorPaginationRefetching(
             data: pState.data,
             meta: pState.meta,
@@ -78,7 +80,7 @@ class PaginationProvider<U extends IBasePaginationRepository>
       );
 
       if (state is CursorpaginationFetchingMore) {
-        final pState = state as CursorpaginationFetchingMore;
+        final pState = state as CursorpaginationFetchingMore<T>;
 
         state = resp.copyWith(
           data: [
