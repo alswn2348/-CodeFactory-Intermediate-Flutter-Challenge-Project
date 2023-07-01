@@ -9,6 +9,7 @@ part 'rating_model.g.dart';
 class RatingModel implements IModelWithId {
   @override
   final String id;
+  
   final UserModel user;
   final int rating;
   final String content;

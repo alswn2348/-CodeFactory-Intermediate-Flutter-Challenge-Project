@@ -5,6 +5,7 @@ import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
 import 'package:codefactory_flutte_project/restaurant/provider/restaurant_provier.dart';
+import 'package:codefactory_flutte_project/restaurant/provider/restaurant_rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletons/skeletons.dart';
@@ -21,6 +22,9 @@ class RestaurantDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(
       restaurantDetailProvider(id),
+    );
+    final ratingsState = ref.watch(
+      restaurantRatingProvider(id),
     );
 
     if (state == null) {
