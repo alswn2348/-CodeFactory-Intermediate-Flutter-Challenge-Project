@@ -1,6 +1,8 @@
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
+import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
 import 'package:codefactory_flutte_project/product/component/product_card.dart';
 import 'package:codefactory_flutte_project/rating/component/rating_cart.dart';
+import 'package:codefactory_flutte_project/rating/model/rating_model.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_detail_model.dart';
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
@@ -47,19 +49,28 @@ class RestaurantDetailScreen extends ConsumerWidget {
             renderProducts(
               products: state.products,
             ),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: SliverToBoxAdapter(
-              child: RatingCard(
-                avatarImage: AssetImage('asset/img/logo/codefactory_logo.png'),
-                images: [],
-                rating: 4,
-                email: "minju123@naver.com",
-                content: "괜찮아요",
-              ),
+          if (ratingsState is CursorPagination<RatingModel>)
+            renderRatings(
+              models: ratingsState.data,
             ),
-          )
         ],
+      ),
+    );
+  }
+
+  SliverPadding renderRatings({required List<RatingModel> models}) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(16.0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: RatingCard.fromModel(
+              model: models[index],
+            ),
+          ),
+          childCount: models.length,
+        ),
       ),
     );
   }
@@ -119,15 +130,16 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   SliverPadding renderLabel() {
     return const SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        sliver: SliverToBoxAdapter(
-          child: Text(
-            "메뉴",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w500,
-            ),
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      sliver: SliverToBoxAdapter(
+        child: Text(
+          "메뉴",
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w500,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

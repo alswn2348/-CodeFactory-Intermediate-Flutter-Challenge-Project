@@ -1,4 +1,5 @@
 import 'package:codefactory_flutte_project/common/const/colors.dart';
+import 'package:codefactory_flutte_project/rating/model/rating_model.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
@@ -22,6 +23,18 @@ class RatingCard extends StatelessWidget {
     required this.content,
   });
 
+  factory RatingCard.fromModel({
+    required RatingModel model,
+  }) {
+    return RatingCard(
+      avatarImage: NetworkImage(model.user.imageUrl),
+      images: model.imgUrls.map((e) => Image.network(e)).toList(),
+      email: model.user.username,
+      rating: model.rating,
+      content: model.content,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,7 +48,6 @@ class RatingCard extends StatelessWidget {
           height: 8.0,
         ),
         Body(content: content),
-        
         if (images.isNotEmpty)
           Images(
             images: images,
