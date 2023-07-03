@@ -30,4 +30,38 @@ class RestaurantStateNotifier
   RestaurantStateNotifier({
     required super.repository,
   });
+
+  void getDetail({
+    required String id,
+  }) async {
+    // 데이터가 하나도 없을때
+    if (state is! CursorPagination) {
+      paginate();
+    }
+
+    if (state is! CursorPagination) {
+      return;
+    }
+
+    final pState = state as CursorPagination;
+
+    final resp = await repository.getRestaurantDetail(id: id);
+
+    if (pState.data.where((e) => e.id == id).isEmpty) {
+      state = pState.copyWith(
+        data: <RestaurantModel>[
+          ...pState.data,
+          resp,
+        ],
+      );
+    } else {
+      state = pState.copyWith(
+        data: pState.data
+            .map<RestaurantModel>(
+              (e) => e.id == id ? resp : e,
+            )
+            .toList(),
+      );
+    }
+  }
 }

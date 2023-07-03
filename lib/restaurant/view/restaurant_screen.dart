@@ -1,5 +1,6 @@
 import 'package:codefactory_flutte_project/common/const/sizes.dart';
 import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
+import 'package:codefactory_flutte_project/common/utils/pagination_utils.dart';
 import 'package:codefactory_flutte_project/restaurant/component/restaurant_card.dart';
 import 'package:codefactory_flutte_project/restaurant/provider/restaurant_provier.dart';
 import 'package:codefactory_flutte_project/restaurant/view/restaurant_detail_screen.dart';
@@ -24,11 +25,15 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
   }
 
   void scrollListener() {
-    if (controller.offset > controller.position.maxScrollExtent) {
+    /*    if (controller.offset > controller.position.maxScrollExtent) {
       ref.read(restaurantProvider.notifier).paginate(
             fetchMore: true,
           );
-    }
+    } */
+    PaginationUtils.paginate(
+      controller: controller,
+      provider: ref.read(restaurantProvider.notifier),
+    );
   }
 
   @override
