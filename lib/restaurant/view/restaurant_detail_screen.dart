@@ -1,5 +1,6 @@
 import 'package:codefactory_flutte_project/common/layout/default_layout.dart';
 import 'package:codefactory_flutte_project/common/model/cursor_pagination_model.dart';
+import 'package:codefactory_flutte_project/common/utils/pagination_utils.dart';
 import 'package:codefactory_flutte_project/product/component/product_card.dart';
 import 'package:codefactory_flutte_project/rating/component/rating_cart.dart';
 import 'package:codefactory_flutte_project/rating/model/rating_model.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletons/skeletons.dart';
 
-class RestaurantDetailScreen extends ConsumerWidget {
+class RestaurantDetailScreen extends ConsumerStatefulWidget {
   final String id;
 
   const RestaurantDetailScreen({
@@ -21,12 +22,36 @@ class RestaurantDetailScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RestaurantDetailScreen> createState() =>
+      _RestaurantDetailScreenState();
+}
+
+class _RestaurantDetailScreenState
+    extends ConsumerState<RestaurantDetailScreen> {
+  final ScrollController controller = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(restaurantProvider.notifier).getDetail(id: widget.id);
+
+    controller.addListener(listener);
+  }
+
+  void listener() {
+    PaginationUtils.paginate(
+      controller: controller,
+      provider: ref.read(restaurantRatingProvider(widget.id).notifier),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(
-      restaurantDetailProvider(id),
+      restaurantDetailProvider(widget.id),
     );
     final ratingsState = ref.watch(
-      restaurantRatingProvider(id),
+      restaurantRatingProvider(widget.id),
     );
 
     if (state == null) {
