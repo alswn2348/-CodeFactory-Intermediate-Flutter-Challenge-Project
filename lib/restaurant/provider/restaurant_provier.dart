@@ -3,6 +3,7 @@ import 'package:codefactory_flutte_project/common/provider/pagination_provider.d
 import 'package:codefactory_flutte_project/restaurant/model/restaurant_model.dart';
 import 'package:codefactory_flutte_project/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 
 final restaurantDetailProvider = Provider.family<RestaurantModel?, String>(
   (ref, id) {
@@ -12,7 +13,7 @@ final restaurantDetailProvider = Provider.family<RestaurantModel?, String>(
       return null;
     }
 
-    return state.data.firstWhere((element) => element.id == id);
+    return state.data.firstWhereOrNull((element) => element.id == id);
   },
 );
 
